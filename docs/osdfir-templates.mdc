@@ -1,0 +1,40 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# OSDFIR in Helm Chart YAML and Template (TPL) files
+
+## OSDFIR:
+  - Helm Chart: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/Chart.yaml`
+  - Values example: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/certs/tls-secrets.yaml`
+  - Templates: 
+    - `https://github.com/google/osdfir-infrastructure/tree/main/charts/osdfir-infrastructure/templates`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/ingress.yaml`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/_helpers.tpl`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/NOTES.txt`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/gcp/managedcertificate.yaml`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/gcp/frontendconfig.yaml`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/certs/cert-manager-issuer.yaml`
+    - `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/templates/certs/tls-secrets.yaml`
+
+## OpenRelik:
+  - Templates: `https://github.com/google/osdfir-infrastructure/tree/main/charts/osdfir-infrastructure/charts/openrelik/templates`
+  - Chart: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/openrelik/Chart.yaml`
+  - Values example: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/openrelik/values.yaml`
+
+## Timesketch:
+  - Templates: `https://github.com/google/osdfir-infrastructure/tree/main/charts/osdfir-infrastructure/charts/timesketch/templates`
+  - Chart: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/timesketch/Chart.yaml`
+  - Values example: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/timesketch/values.yaml`
+
+## Yeti:
+  - Templates envs: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/yeti/templates`
+  - Chart: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/yeti/Chart.yaml`
+  - Values example: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/yeti/values.yaml`
+
+## HashR:
+  - Templates envs: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/yeti/templates`
+  - Chart: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/hashr/Chart.yaml`
+
+  - Values example: `https://github.com/google/osdfir-infrastructure/blob/main/charts/osdfir-infrastructure/charts/hashr/values.yaml`

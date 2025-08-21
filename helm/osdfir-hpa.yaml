@@ -1,0 +1,40 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: timesketch-worker
+  namespace: osdfir
+  annotations:
+    autoscaling.k8s.io/behavior: "cpu-and-memory"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: osdfir-timesketch-worker
+  minReplicas: 1
+  maxReplicas: 4
+behavior:
+  scaleUp:
+    stabilizationWindowSeconds: 60
+    policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+  scaleDown:
+    stabilizationWindowSeconds: 300
+    policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: "2000m"
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80

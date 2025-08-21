@@ -1,0 +1,135 @@
+global:
+  timesketch:
+    enabled: true
+  # Explicitly disable other components
+  openrelik:
+    enabled: false  # Completely disabled in this Timesketch-only deployment
+  yeti:
+    enabled: false
+
+timesketch:
+  image:
+    repository: us-docker.pkg.dev/osdfir-registry/timesketch/timesketch
+    tag: "20250521"
+    pullPolicy: IfNotPresent
+  # Create users for Timesketch
+  # The password will be automatically stored in a Kubernetes secret.
+  users:
+    - username: admin
+      password: "aVeryStrongAndSecurePassword123!" # Change this password
+  persistence:
+    enabled: true
+    existingPVC: osdfirvolume
+  config:
+    override: true
+    existingConfigMap: osdfir-timesketch-configs
+  web:
+    # Schedule on base nodes
+    nodeSelector: {"pool": "base"}
+    replicaCount: 2
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 4Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+  worker:
+    # Schedule on base nodes
+    nodeSelector: {"pool": "base"}
+    replicaCount: 4
+    autoscaling:
+      enabled: true
+      minReplicas: 4
+      maxReplicas: 10
+      metrics:
+        - type: Resource
+          resource:
+            name: cpu
+            target:
+              type: Utilization
+              averageUtilization: 80
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 4Gi
+      limits:
+        cpu: 2000m
+        memory: 8Gi
+  postgresql:
+    auth:
+      postgresPassword: "postgres"
+      username: "timesketch"
+      password: "timesketch"
+      database: "timesketch"
+    image:
+      repository: postgres
+      tag: "17.2-alpine"
+    persistence:
+      enabled: true
+      size: 100Gi
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 2000m
+        memory: 4Gi
+  opensearch:
+    image:
+      repository: opensearchproject/opensearch
+      tag: "2.15.0"
+    sysctlInit:
+      enabled: true
+    # Schedule on base nodes
+    nodeSelector: {"pool": "base"}
+    persistence:
+      enabled: true
+      size: 250Gi
+      storageClass: premium-rwo
+    master:         # Cluster coordination
+      masterOnly: true
+      replicaCount: 4
+      extraEnvs:
+        - name: OPENSEARCH_JAVA_OPTS
+          value: "-Xmx8g -Xms8g"
+        - name: cluster.initial_cluster_manager_nodes
+          value: osdfir-opensearch-cluster-0,osdfir-opensearch-cluster-1,osdfir-opensearch-cluster-2
+      resources:
+        requests:
+          cpu: 2000m
+          memory: 8Gi
+        limits:
+          cpu: 4000m
+          memory: 16Gi
+    data:         # Indexing, search, shard storage
+      replicaCount: 4
+      persistence:
+        enabled: true
+        size: 1Ti
+        storageClass: premium-rwo
+      resources:
+        requests:
+          cpu: 2000m
+          memory: 8Gi
+        limits:
+          cpu: 4000m
+          memory: 16Gi
+    coordinating: # Query routing and aggregation
+      replicaCount: 0
+    ingest:       # Preprocessing ingest pipelines
+      replicaCount: 0
+
+  redis:
+    persistence:
+      enabled: true
+      size: 20Gi
+    extraConfig: |
+      maxmemory 10GB
+      maxmemory-policy allkeys-lru
+    password: "timesketchRedisPassword"
+    resources:
+      requests:
+        memory: "8Gi"
+      limits:
+        memory: "10Gi"
